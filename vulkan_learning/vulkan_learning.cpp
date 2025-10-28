@@ -4,6 +4,19 @@
 #include "vulkan_learning.h"
 
 int main() {
-	
-	std::cout << "Hello, World!\n";
+
+    glfwInit();
+
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    
+    GLFWwindow* window = glfwCreateWindow(800, 600, "METANIT.COM", nullptr, nullptr);
+
+    while (!glfwWindowShouldClose(window)) {
+        glfwWaitEvents();
+    }
+
+    glfwDestroyWindow(window);
+
+    
+    glfwTerminate();
 }
