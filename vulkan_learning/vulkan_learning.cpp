@@ -3,6 +3,7 @@
 
 #include "vulkan_learning.h"
 #include "vulkan/vulkan_raii.hpp"
+#include <GLFW/glfw3.h>
 
 /*
 typedef struct VkApplicationInfo {
@@ -17,6 +18,12 @@ typedef struct VkApplicationInfo {
 */
 
 int main() {
+
+    uint32_t glfw_extension_count = 0;
+    const char** glfw_extensions;
+
+    glfw_extensions = glfwGetRequiredInstanceExtensions(&glfw_extension_count);
+
 	auto extensions = vk::enumerateInstanceExtensionProperties();
     vk::ApplicationInfo app_info{
         "Name", 
@@ -25,11 +32,16 @@ int main() {
         vk::makeVersion(1,0,0), 
         vk::ApiVersion10
     };
-    vk::InstanceCreateInfo info{{},&app_info};
+    vk::InstanceCreateInfo info{}; {
+        info.setEnabledExtensionCount(glfw_extension_count);
+        info.setPpEnabledExtensionNames(glfw_extensions);
+    }
 	vk::raii::Context ctx{};
 	vk::raii::Instance instance{ctx, info};
 
-
+    for (auto& extension : extensions) {
+        std::cout << extension.extensionName << " " << extension.specVersion << '\n';
+    }
 
     std::cout << app_info.pApplicationName << '\n';
     std::cout << app_info.applicationVersion << '\n';  // 4194304 или 10000000000000000000000
